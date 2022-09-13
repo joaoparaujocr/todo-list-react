@@ -51,3 +51,56 @@ export const registerUser = async ({email, password, name}: any) => {
       })
       .catch(err => "")
 }
+
+export const createTask = async (content: string) => {
+  const user: any = localStorage.getItem("user");
+  const userJs = JSON.parse(user);
+  const data = {
+    content,
+    complete: false,
+    userId: userJs.user.id,
+  }
+
+  await
+    api
+      .post("tasks", data)
+      .then(res => res.data)
+      .catch(err => console.error(err))
+
+}
+
+export const deleteTask = async (id: number)  => {
+  await
+    api
+      .delete(`tasks/${id}`)
+      .then(({ data }) => data)
+      .catch(err => console.error(err))
+}
+
+export const checkedTask = async (id: number) => {
+  await
+    api
+      .patch(`tasks/${id}`, {
+        complete: true
+      })
+      .then(({ data }) => data)
+      .catch(err => console.error(err))
+}
+
+export const uncheckedTask = async (id: number) => {
+  await
+    api
+      .patch(`tasks/${id}`, {
+        complete: false
+      })
+      .then(({ data }) => data)
+      .catch(err => console.error(err))
+}
+
+export const updateTask = async (id: number, content: string) => {
+  await
+    api
+      .patch(`tasks/${id}`, { content })
+      .then(({ data }) => data)
+      .catch(err => console.error(err))
+}
